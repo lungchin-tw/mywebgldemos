@@ -2,12 +2,24 @@
 <html>
     <head>
         <title>Hello WebGL2</title>
-        <style>
-            #hellowebgl2{border: 1px solid red;}
-        </style>
+        
     </head>
     <body>
-        <canvas id="hellowebgl2" width="800" height="600">
+        <!-- <style>
+            #hellowebgl2 {
+                border: 1px solid red;
+                width: 800px;
+                height: 600px;
+            }
+        </style> -->
+        <style>
+            #hellowebgl2 {
+                width: 100vw;
+                height: 100vh;
+                display: block;
+            }
+        </style>
+        <canvas id="hellowebgl2" width="400" height="300">
             This Will be displayed if your browser doesn't support the canvas element. The closing tag is nessary.
         </canvas>
         <script src="./core/env.js" type="module"></script>

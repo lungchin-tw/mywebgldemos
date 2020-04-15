@@ -4,22 +4,27 @@ import * as CoreEnv from './core/env.js'
 import * as Shaders from './shaders.js'
 import * as Renderer from './core/renderer.js'
 
+const CANVASID = "#hellowebgl2"
+
 function main() {
+    CoreEnv.adjustDrawingBuffer(document.querySelector(CANVASID))
+
+    CoreEnv.printEnvProperties(CANVASID)
+    
     console.log(CoreEnv.getCurrentFuncName())
     /**
      * Approach: All In One
      */
-    // var canvas = document.querySelector("#hellowebgl2"); // OR: document.getElementById("hellowebgl2"); 
+    // var canvas = document.querySelector(CANVASID); // OR: document.getElementById("hellowebgl2"); 
     // var context = canvas.getContext('webgl2');
 
-    let gl = CoreEnv.getWebGL2Context("#hellowebgl2");
+    let gl = CoreEnv.getWebGL2Context(CANVASID);
     if (!gl) {
         console.log("WebGL2 was NOT found.");
         return
+    } else {
+        console.log("WebGL2 was found.");
     }
-
-    console.log("WebGL2 was found.");
-    
 
     /**
      * Create Shaders
