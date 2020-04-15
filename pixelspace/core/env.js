@@ -18,7 +18,7 @@ export function getCurrentFuncName() {
 }
 
 export function getWebGL2Context(canvasid) {
-    var canvas = document.querySelector(canvasid); // OR: document.getElementById("hellowebgl2"); 
+    var canvas = document.querySelector(canvasid);
     return canvas.getContext('webgl2');
 }
 
