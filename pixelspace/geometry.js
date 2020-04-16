@@ -1,12 +1,12 @@
 'use strict';
 
 export let pixelspace = [
-    0, 0,
-    70, 0,
-    30, 40,
-    30, 40,
-    70, 0,
-    100, 40.
+    0, 4,
+    7, 4,
+    3, 0,
+    3, 0,
+    7, 4,
+    10, 0,
 ];
 
 export let clipspace = [

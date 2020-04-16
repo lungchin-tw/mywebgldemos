@@ -1,6 +1,7 @@
 'use strict';
 
 import * as CoreEnv from './core/env.js'
+import * as CoreMath from './core/math.js'
 import * as Shaders from './shaders.js'
 import * as Renderer from './core/renderer.js'
 import * as Geometry from './geometry.js'
@@ -42,7 +43,6 @@ function main() {
     let attr_pos = gl.getAttribLocation(program, "a_position");
     let attr_pos_buffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, attr_pos_buffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(Geometry.pixelspace), gl.STATIC_DRAW)
 
     let vao = gl.createVertexArray();
     gl.bindVertexArray(vao);
@@ -61,6 +61,7 @@ function main() {
     let u_scale = gl.getUniformLocation(program, "u_scale");
     let u_location = gl.getUniformLocation(program, "u_location");
     let u_resolution = gl.getUniformLocation(program, "u_resolution");
+    let u_color = gl.getUniformLocation(program, "u_color");
     
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
     gl.clearColor(0.9,0.9,0.8,1);
@@ -71,11 +72,15 @@ function main() {
     gl.bindVertexArray(vao);
 
     // Setup the Resolution Uniform
-    gl.uniform1f(u_scale, 3)
-    gl.uniform2f(u_location, 250, 250)
     gl.uniform2f(u_resolution, gl.canvas.width, gl.canvas.height)
 
-    gl.drawArrays(gl.TRIANGLES, 0, 6)
+    for (let i = 0; i < 50; ++i ) {
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(Geometry.pixelspace), gl.STATIC_DRAW)
+        gl.uniform1f(u_scale, (30 + CoreMath.randomInt(100)))
+        gl.uniform2f(u_location, CoreMath.randomInt(gl.canvas.width * 0.7 ), CoreMath.randomInt(gl.canvas.height * 0.7) )
+        gl.uniform4f(u_color, Math.random(), Math.random(), Math.random(), 1 )
+        gl.drawArrays(gl.TRIANGLES, 0, 6)
+    }
 }
 
 main();
