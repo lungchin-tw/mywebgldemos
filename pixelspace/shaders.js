@@ -9,6 +9,9 @@ in vec2 a_position;
 uniform float u_scale;
 uniform vec2 u_location;
 uniform vec2 u_resolution;
+uniform vec4 u_color;
+
+out vec4 v_color;
  
 // all shaders have a main function
 void main() {
@@ -22,6 +25,7 @@ void main() {
   // gl_Position is a special variable a vertex shader
   // is responsible for setting
   gl_Position = vec4(revclipspace, 0, 1);
+  v_color = (gl_Position * 0.5) + u_color;
 }
 `;
 
@@ -31,13 +35,13 @@ export let fs = `#version 300 es
 // to pick one. mediump is a good default. It means "medium precision"
 precision mediump float;
 
-uniform vec4 u_color;
+in vec4 v_color;
  
 // we need to declare an output for the fragment shader
 out vec4 outColor;
  
 void main() {
   // Just set the output to a constant reddish-purple
-  outColor = u_color;
+  outColor = v_color;
 }
 `;

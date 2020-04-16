@@ -75,7 +75,7 @@ function main() {
     gl.uniform2f(u_resolution, gl.canvas.width, gl.canvas.height)
 
     for (let i = 0; i < 50; ++i ) {
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(Geometry.pixelspace), gl.STATIC_DRAW)
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(Geometry.parallelogram), gl.STATIC_DRAW)
         gl.uniform1f(u_scale, (30 + CoreMath.randomInt(100)))
         gl.uniform2f(u_location, CoreMath.randomInt(gl.canvas.width * 0.7 ), CoreMath.randomInt(gl.canvas.height * 0.7) )
         gl.uniform4f(u_color, Math.random(), Math.random(), Math.random(), 1 )

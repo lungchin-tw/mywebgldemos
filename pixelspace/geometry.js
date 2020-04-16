@@ -1,6 +1,6 @@
 'use strict';
 
-export let pixelspace = [
+export let parallelogram = [
     0, 4,
     7, 4,
     3, 0,
