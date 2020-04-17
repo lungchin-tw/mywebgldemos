@@ -1,1 +1,1 @@
-# MyWebGLProject
+# My WebGL Demos
