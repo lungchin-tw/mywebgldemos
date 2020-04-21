@@ -52,7 +52,7 @@ void main() {
   // Just set the output to a constant reddish-purple
   vec4 texel = texture(u_texture, v_texcoord);
   // outColor = v_color;
-  // outColor = (texel * 0.5) + (v_color * 0.5);
-  outColor = texel + v_color;
+  // outColor = texel + v_color;
+  outColor = (texel * 0.5) + (v_color * 0.5);
 }
 `;

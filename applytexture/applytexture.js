@@ -92,6 +92,10 @@ function main() {
     console.log(`UniformColor: ${u_color}`);
     console.log(`UniformTexture: ${u_texture}`);
 
+    const scale = 30 + CoreMath.randomInt(100);
+    const location = [CoreMath.randomInt(gl.canvas.width * 0.6 ), CoreMath.randomInt(gl.canvas.height * 0.6)];
+    const color = [Math.random(), Math.random(), Math.random(), 1];
+    
     /**
      * Setup Geometry Data
      */
@@ -132,41 +136,43 @@ function main() {
         0, // stride
         0 // offset
     );
+
+    requestAnimationFrame(drawScene);
     
-    /**
-     * Clear the Viewport
-     */
-    console.log("Clear the Viewport");
-    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-    gl.clearColor(0.9,0.9,0.8,1);
-    gl.clear(gl.COLOR_BUFFER_BIT);
+    function drawScene(now) {
+        /**
+         * Clear the Viewport
+         */
+        gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+        gl.clearColor(0.9,0.9,0.8,1);
+        gl.clear(gl.COLOR_BUFFER_BIT);
 
-    /**
-     * Use this shader Program
-     */
-    console.log("Use this shader Program");
-    gl.useProgram(program);
-    gl.bindVertexArray(vao);
+        /**
+         * Use this shader Program
+         */
+        gl.useProgram(program);
+        gl.bindVertexArray(vao);
 
-    // Setup the Resolution Uniform
-    console.log("Setup the Resolution Uniform");
-    gl.uniform2f(u_resolution, gl.canvas.width, gl.canvas.height)
+        // Setup the Resolution Uniform
+        gl.uniform2f(u_resolution, gl.canvas.width, gl.canvas.height)
 
-    /**
-     * Bind Texture Sampler
-     */
-    console.log("Bind Texture Sampler");
-    let tex_unit = 0;
-    gl.activeTexture(gl.TEXTURE0 + tex_unit);
-    gl.bindTexture(gl.TEXTURE_2D, texture);
-    gl.uniform1i(u_texture, tex_unit);
+        /**
+         * Bind Texture Sampler
+         */
+        let tex_unit = 0;
+        gl.activeTexture(gl.TEXTURE0 + tex_unit);
+        gl.bindTexture(gl.TEXTURE_2D, texture);
+        gl.uniform1i(u_texture, tex_unit);
 
-    // Draw Geometry
-    console.log("Draw Geometry");
-    gl.uniform1f(u_scale, (30 + CoreMath.randomInt(100)))
-    gl.uniform2f(u_location, CoreMath.randomInt(gl.canvas.width * 0.7 ), CoreMath.randomInt(gl.canvas.height * 0.7) )
-    gl.uniform4f(u_color, Math.random(), Math.random(), Math.random(), 1 )
-    gl.drawArrays(gl.TRIANGLES, 0, 6)
+        // Draw Geometry
+        gl.uniform1f(u_scale, scale);
+        gl.uniform2fv(u_location, location );
+        gl.uniform4fv(u_color, color );
+        gl.drawArrays(gl.TRIANGLES, 0, 6);
+
+        requestAnimationFrame(drawScene);
+    }
+    
     console.log("FINISHED...");
 }
 
