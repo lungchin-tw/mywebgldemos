@@ -129,9 +129,9 @@ function main() {
     );
 
     /**
-     * Setup Texture Coordination Buffer
+     * Setup Texture Coords Buffer
      */
-    console.log("Setup Texture Coordination Buffer");
+    console.log("Setup Texture Coords Buffer");
     const attr_tex_coord_buffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, attr_tex_coord_buffer);
     gl.bufferData(gl.ARRAY_BUFFER, Geometry.PARALLELOGRAM_TEXCOORD, gl.STATIC_DRAW);
@@ -144,6 +144,14 @@ function main() {
         0, // stride
         0 // offset
     );
+
+    /**
+     * Setup Vertex Indices Buffer
+     */
+    console.log("Setup Vertex Indices Buffer");
+    const index_buffer = gl.createBuffer();
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, index_buffer);
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, Geometry.PARALLELOGRAM_INDICES, gl.STATIC_DRAW);
 
     let start = null;
     const FRAME_INTERVAL = 1000 / 5;
@@ -192,7 +200,7 @@ function main() {
             gl.uniform1f(u_scale, scale_array[i]);
             gl.uniform2fv(u_location, loc_array[i]);
             gl.uniform4fv(u_color, color_array[i]);
-            gl.drawArrays(gl.TRIANGLES, 0, 6);
+            gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
         }
 
         requestAnimationFrame(drawScene);
