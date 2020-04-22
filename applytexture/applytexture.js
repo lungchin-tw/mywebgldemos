@@ -47,6 +47,7 @@ function loadImage(path, oncomplete) {
     console.log(CoreEnv.getCurrentFuncName() + " End...")
 }
 
+
 function main() {
     console.log(CoreEnv.getCurrentFuncName())
     
@@ -92,9 +93,16 @@ function main() {
     console.log(`UniformColor: ${u_color}`);
     console.log(`UniformTexture: ${u_texture}`);
 
-    const scale = 30 + CoreMath.randomInt(100);
-    const location = [CoreMath.randomInt(gl.canvas.width * 0.6 ), CoreMath.randomInt(gl.canvas.height * 0.6)];
-    const color = [Math.random(), Math.random(), Math.random(), 1];
+    const NUM_INSTANCES = 3;
+    let scale_array = [];
+    let loc_array = [];
+    let color_array = [];
+
+    for (let i = 0; i < NUM_INSTANCES; i++) {
+        scale_array.push( 30 + CoreMath.randomInt(100));
+        loc_array.push([CoreMath.randomInt(gl.canvas.width * 0.6 ), CoreMath.randomInt(gl.canvas.height * 0.6)]);
+        color_array.push([Math.random(), Math.random(), Math.random(), 1]);
+    }
     
     /**
      * Setup Geometry Data
@@ -137,9 +145,24 @@ function main() {
         0 // offset
     );
 
+    let start = null;
+    const FRAME_INTERVAL = 1000 / 5;
     requestAnimationFrame(drawScene);
     
     function drawScene(now) {
+        if ((start != null) && ((now - start) < FRAME_INTERVAL)) {
+            requestAnimationFrame(drawScene);
+            return;
+        }
+
+        // console.log(`${CoreEnv.getCurrentFuncName()}, Delta:${now - start}`);
+
+        if ( start == null ) {
+            start = now;
+        }
+
+        start = now;
+
         /**
          * Clear the Viewport
          */
@@ -165,10 +188,12 @@ function main() {
         gl.uniform1i(u_texture, tex_unit);
 
         // Draw Geometry
-        gl.uniform1f(u_scale, scale);
-        gl.uniform2fv(u_location, location );
-        gl.uniform4fv(u_color, color );
-        gl.drawArrays(gl.TRIANGLES, 0, 6);
+        for (let i = 0; i < NUM_INSTANCES; i++) {
+            gl.uniform1f(u_scale, scale_array[i]);
+            gl.uniform2fv(u_location, loc_array[i]);
+            gl.uniform4fv(u_color, color_array[i]);
+            gl.drawArrays(gl.TRIANGLES, 0, 6);
+        }
 
         requestAnimationFrame(drawScene);
     }
