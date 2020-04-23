@@ -1,6 +1,6 @@
 'use strict';
 
-let matrix33 = {
+export let matrix33 = {
     identity: function() {
         return [
             1, 0, 0,
@@ -38,9 +38,9 @@ let matrix33 = {
 
     projection: function(width, height) {
         return [
-            (2 / width),             0, 0,
-            0,           -(2 / height), 0,
-           -1,                       1, 1,
+            (2.0 / width),               0, 0,
+                        0, -(2.0 / height), 0,
+                       -1,               1, 1,
        ];
     },
 

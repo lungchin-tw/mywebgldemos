@@ -2,6 +2,7 @@
 
 import * as CoreEnv from './core/env.js'
 import * as CoreRand from './core/rand.js'
+import * as CoreMatrix from './core/matrix.js'
 import * as ImageLoader from './core/imageloader.js'
 import * as Renderer from './core/renderer.js'
 import * as Shaders from './shaders.js'
@@ -81,17 +82,13 @@ function main() {
      */
     const attr_pos = gl.getAttribLocation(program, "a_position");
     const attr_texcoord = gl.getAttribLocation(program, "a_texcoord");
-    const u_scale = gl.getUniformLocation(program, "u_scale");
-    const u_location = gl.getUniformLocation(program, "u_location");
-    const u_resolution = gl.getUniformLocation(program, "u_resolution");
+    const u_local2clipspace = gl.getUniformLocation(program, "u_local2clipspace");
     const u_color = gl.getUniformLocation(program, "u_color");
     const u_texture = gl.getUniformLocation(program, "u_texture");
 
     console.log(`AttrPos: ${attr_pos}`);
     console.log(`AttrTexcoord: ${attr_texcoord}`);
-    console.log(`UniformScale: ${u_scale}`);
-    console.log(`UniformLocation: ${u_location}`);
-    console.log(`UniformResolution: ${u_resolution}`);
+    console.log(`UniformLocal2ClipSpace: ${u_local2clipspace}`);
     console.log(`UniformColor: ${u_color}`);
     console.log(`UniformTexture: ${u_texture}`);
 
@@ -187,10 +184,7 @@ function main() {
          */
         gl.useProgram(program);
         gl.bindVertexArray(vao);
-
-        // Setup the Resolution Uniform
-        gl.uniform2f(u_resolution, gl.canvas.width, gl.canvas.height)
-
+        
         /**
          * Bind Texture Sampler
          */
@@ -201,8 +195,15 @@ function main() {
 
         // Draw Geometry
         for (let i = 0; i < NUM_INSTANCES; i++) {
-            gl.uniform1f(u_scale, scale_array[i]);
-            gl.uniform2fv(u_location, loc_array[i]);
+            let s = CoreMatrix.matrix33.scaling(scale_array[i], scale_array[i]);
+            let r = CoreMatrix.matrix33.rotation(0);
+            let t = CoreMatrix.matrix33.translation(loc_array[i][0], loc_array[i][1]);
+            let p = CoreMatrix.matrix33.projection(gl.canvas.width, gl.canvas.height);
+            let matrix = CoreMatrix.matrix33.multiply(s, r);
+            matrix = CoreMatrix.matrix33.multiply(matrix, t);
+            matrix = CoreMatrix.matrix33.multiply(matrix, p);
+            
+            gl.uniformMatrix3fv(u_local2clipspace, false, matrix);
             gl.uniform4fv(u_color, color_array[i]);
             gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
         }
