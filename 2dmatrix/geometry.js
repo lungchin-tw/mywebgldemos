@@ -1,11 +1,13 @@
 'use strict';
 
 // Traditional Coordinate: Left-Top is (0,0)
+
+// Local Coord, Center=(0,0)
 export const PARALLELOGRAM_POS = new Float32Array([
-    0, 4, // 0
-    7, 4, // 1
-    3, 0, // 2
-    10, 0, // 3
+    -5, 2, // 0
+    2, 2, // 1
+    -2, -2, // 2
+    5, -2, // 3
 ]);
 
 export const PARALLELOGRAM_TEXCOORD = new Float32Array([

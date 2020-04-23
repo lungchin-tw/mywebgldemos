@@ -22,6 +22,7 @@ void main() {
   vec2 zero2one = worldpos / u_resolution;
   vec2 zero2two = zero2one * 2.0;
   vec2 clipspace = zero2two - 1.0;
+  // vec2 revclipspace = clipspace;
   vec2 revclipspace = clipspace * vec2(1, -1); // reverse y axis to become traditional 2D coodinator System
   
  

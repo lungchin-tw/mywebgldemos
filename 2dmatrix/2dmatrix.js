@@ -1,7 +1,7 @@
 'use strict';
 
 import * as CoreEnv from './core/env.js'
-import * as CoreMath from './core/math.js'
+import * as CoreRand from './core/rand.js'
 import * as ImageLoader from './core/imageloader.js'
 import * as Renderer from './core/renderer.js'
 import * as Shaders from './shaders.js'
@@ -23,6 +23,8 @@ function init( canvasid ) {
     } else {
         console.log("WebGL2 was found.");
     }
+
+    console.log(`OES_element_index_uint: ${gl.getExtension("OES_element_index_uint")}`);
     
     CoreEnv.adjustDrawingBufferForHDDPI(gl)
 
@@ -97,10 +99,12 @@ function main() {
     let scale_array = [];
     let loc_array = [];
     let color_array = [];
+    let widthrange = [(gl.canvas.width * 0.1), (gl.canvas.width * 0.9)];
+    let heightrange = [(gl.canvas.height * 0.1), (gl.canvas.height * 0.9)];
 
     for (let i = 0; i < NUM_INSTANCES; i++) {
-        scale_array.push( 30 + CoreMath.randomInt(100));
-        loc_array.push([CoreMath.randomInt(gl.canvas.width * 0.6 ), CoreMath.randomInt(gl.canvas.height * 0.6)]);
+        scale_array.push( 30 + CoreRand.randomInt(0, 100));
+        loc_array.push([CoreRand.randomInt(widthrange[0], widthrange[1]), CoreRand.randomInt(heightrange[0], heightrange[1])]);
         color_array.push([Math.random(), Math.random(), Math.random(), 1]);
     }
     
@@ -203,7 +207,8 @@ function main() {
             gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
         }
 
-        requestAnimationFrame(drawScene);
+        let id = requestAnimationFrame(drawScene);
+        // console.log(`requestAnimationFrame(drawScene):${id}`);
     }
     
     console.log("FINISHED...");
