@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html>
+    
     <head>
         <title>PERSPECTIVE MATH DEMO</title>
         <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico">
     </head>
     <body>
+        <link href="2dmatrix.css" rel="stylesheet" type="text/css">
         <p><a href="../index.html">Home</a></p>
         <style>
             #maincanvas {
@@ -16,10 +18,16 @@
         <canvas id="maincanvas">
             This Will be displayed if your browser doesn't support the canvas element. The closing tag is nessary.
         </canvas>
+        <div id="uiContainer">
+            <div id="ui">
+                <div id="angle"></div>
+            </div>
+        </div>
         <script src="./core/env.js" type="module"></script>
         <script src="./core/renderer.js" type="module"></script>
         <script src="./core/rand.js" type="module"></script>
         <script src="./core/matrix.js" type="module"></script>
+        <script src="./3rdparty/webgl-lesson-ui.js"></script>
         <script src="2dmatrix.js" type="module"></script>
     </body>
 </html>

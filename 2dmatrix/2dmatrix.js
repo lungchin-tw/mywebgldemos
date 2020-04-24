@@ -9,7 +9,6 @@ import * as Shaders from './shaders.js'
 import * as Geometry from './geometry.js'
 
 
-
 function init( canvasid ) {
     console.log("Before Adjust Drawing Buffer:");
     CoreEnv.printEnvProperties(canvasid)
@@ -154,23 +153,26 @@ function main() {
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, index_buffer);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, Geometry.PARALLELOGRAM_INDICES, gl.STATIC_DRAW);
 
-    let start = null;
-    const FRAME_INTERVAL = 1000 / 5;
+    let worldAngleRad = 0;
+    let isDirty = true;
+
     requestAnimationFrame(drawScene);
+
+    
+    webglLessonsUI.setupSlider("#angle", {value: 0 * 180 / Math.PI | 0, slide: updateAngle, max: 360});
+    function updateAngle(event, ui) {
+        let degree = ui.value;
+        worldAngleRad = degree * Math.PI / 180;
+        isDirty = true;
+    }
     
     function drawScene(now) {
-        if ((start != null) && ((now - start) < FRAME_INTERVAL)) {
+        if ( isDirty == false ) {
             requestAnimationFrame(drawScene);
             return;
         }
 
-        // console.log(`${CoreEnv.getCurrentFuncName()}, Delta:${now - start}`);
-
-        if ( start == null ) {
-            start = now;
-        }
-
-        start = now;
+        isDirty = true;
 
         /**
          * Clear the Viewport
@@ -196,7 +198,7 @@ function main() {
         // Draw Geometry
         for (let i = 0; i < NUM_INSTANCES; i++) {
             let s = CoreMatrix.matrix33.scaling(scale_array[i], scale_array[i]);
-            let r = CoreMatrix.matrix33.rotation(0);
+            let r = CoreMatrix.matrix33.rotation(worldAngleRad);
             let t = CoreMatrix.matrix33.translation(loc_array[i][0], loc_array[i][1]);
             let p = CoreMatrix.matrix33.projection(gl.canvas.width, gl.canvas.height);
             let matrix = CoreMatrix.matrix33.multiply(s, r);
