@@ -53,6 +53,8 @@ function main() {
     
 
     console.log(`UniformLocal2ClipSpace: ${u_local2clipspace}`);
+
+    const matWorld2screen = CoreMatrix.matrix44.orthographic(0, gl.canvas.width, gl.canvas.height, 0, 400, -400 );
     
     const NUM_INSTANCES = 1;
     let instances = [];
@@ -99,7 +101,8 @@ function main() {
         } else {
             instances.forEach((item) => {
                 let radians = [CoreMath.degree2Radian(item.angle[0]), CoreMath.degree2Radian(item.angle[1]), CoreMath.degree2Radian(item.angle[2])];
-                item.matrix = CoreMatrix.matrix44.local2ClipSpace(item.scale, radians, item.location, gl.canvas.width, gl.canvas.height, 10000);
+                let matrix = CoreMatrix.matrix44.local2World(item.scale, radians, item.location);
+                item.matrix = CoreMatrix.matrix44.multiply(matrix, matWorld2screen);
             });
         }
 

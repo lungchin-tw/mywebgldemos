@@ -140,12 +140,12 @@ export let matrix44 = {
         ];
     },
 
-    projection: function(width, height, depth) {
+    orthographic: function(left, right, bottom, top, near, far) {
         return [
-            (2.0 / width),               0,             0, 0,
-                        0, -(2.0 / height),             0, 0,
-                        0,               0, (2.0 / depth), 0,
-                       -1,               1,             0, 1,
+                     (2.0 / (right - left)),                               0,                           0, 0,
+                                          0,          (2.0 / (top - bottom)),                           0, 0,
+                                          0,                               0,        (2.0 / (near - far)), 0,
+            (left + right) / (left - right), (bottom + top) / (bottom - top), (near + far) / (near - far), 1,
        ];
     },
 
@@ -175,19 +175,17 @@ export let matrix44 = {
             (a[12] * b[3]) + (a[13] * b[7]) + (a[14] * b[11]) + (a[15] * b[15]), // 33
         ];
     },
-
-    local2ClipSpace: function( scale, angle, location, sw, sh, depth ) {
+    
+    local2World: function( scale, angle, location) {
         let s = matrix44.scaling(scale, scale, scale);
         let rx = matrix44.xRotation(angle[0]);
         let ry = matrix44.yRotation(angle[1]);
         let rz = matrix44.zRotation(angle[2]);
         let t = matrix44.translation(location[0], location[1], location[2]);
-        let p = matrix44.projection(sw, sh, depth);
         let matrix = matrix44.multiply(s, rx);
         matrix = matrix44.multiply(matrix, ry);
         matrix = matrix44.multiply(matrix, rz);
         matrix = matrix44.multiply(matrix, t);
-        matrix = matrix44.multiply(matrix, p);
         return matrix;
     }
 };
