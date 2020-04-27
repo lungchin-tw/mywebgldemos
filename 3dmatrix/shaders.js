@@ -4,23 +4,20 @@ export let vs = `#version 300 es
  
 // an attribute is an input (in) to a vertex shader.
 // It will receive data from a buffer
-in vec2 a_position;
-in vec2 a_texcoord;
+in vec4 a_position;
+in vec4 a_color;
 
-uniform mat3 u_local2clipspace;
-uniform vec4 u_color;
+uniform mat4 u_local2clipspace;
 
 out vec4 v_color;
-out vec2 v_texcoord;
 
  
 // all shaders have a main function
 void main() {
   // gl_Position is a special variable a vertex shader
   // is responsible for setting
-  gl_Position = vec4((u_local2clipspace * vec3(a_position, 1)).xy, 0, 1);
-  v_color = (gl_Position * 0.5) + u_color;
-  v_texcoord = a_texcoord;
+  gl_Position = u_local2clipspace * a_position;
+  v_color = a_color;
 }
 `;
 
@@ -31,9 +28,6 @@ export let fs = `#version 300 es
 precision mediump float;
 
 in vec4 v_color;
-in vec2 v_texcoord;
-
-uniform sampler2D u_texture;
 
  
 // we need to declare an output for the fragment shader
@@ -41,9 +35,6 @@ out vec4 outColor;
  
 void main() {
   // Just set the output to a constant reddish-purple
-  vec4 texel = texture(u_texture, v_texcoord);
-  // outColor = v_color;
-  // outColor = texel + v_color;
-  outColor = (texel * 0.5) + (v_color * 0.5);
+  outColor = v_color;
 }
 `;

@@ -5,24 +5,6 @@ import * as CoreEnv from './core/env.js'
 // Traditional Coordinate: Left-Top is (0,0)
 
 // Local Coord, Center=(0,0)
-export const PARALLELOGRAM_POS = new Float32Array([
-    -5, 2, // 0
-    2, 2, // 1
-    -2, -2, // 2
-    5, -2, // 3
-]);
-
-export const PARALLELOGRAM_TEXCOORD = new Float32Array([
-    0, 1,
-    1, 1,
-    0, 0,
-    1, 0,
-]);
-
-export const PARALLELOGRAM_INDICES = new Uint16Array([
-    0, 1, 2,
-    2, 1, 3,
-]);
 
 /**
  * 
@@ -90,7 +72,7 @@ export function makeParallelogram(gl, program) {
 
     geometry.indexBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, geometry.indexBuffer);
-    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, vertindices, gl.STATIC_DRAW);   
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, vertindices, gl.STATIC_DRAW);
 
     return geometry;
 }
@@ -101,7 +83,15 @@ export function makeParallelogram(gl, program) {
  * @param {int} size Cube Size
  * @description Apply Right-Hand Rule -> Right: X-Axis, Up: Y-Axis, OutScreen: Z-Axis
  */
-export function makeCube(gl, size) {
+export function makeCube(gl, program) {
+    console.log(CoreEnv.getCurrentFuncName());
+
+    const a_position = gl.getAttribLocation(program, "a_position");
+    const a_color = gl.getAttribLocation(program, "a_color");
+
+    console.log(`AttrPos: ${a_position}`);
+    console.log(`AttrColor: ${a_color}`);
+
     const vertices = new Float32Array([
         0.5,  0.5,  0.5, // #0 Face +X-Axis
         0.5, -0.5,  0.5, // #1 Face +X-Axis
@@ -132,26 +122,6 @@ export function makeCube(gl, size) {
          0.5, -0.5,  0.5, // #21 Face -Y-Axis
         -0.5, -0.5,  0.5, // #22 Face -Y-Axis
         -0.5, -0.5, -0.5, // #23 Face -Y-Axis
-    ]);
-
-    let vert_indices = new Uint16Array([
-        0, 1, 2, // Face +X-Axis
-        2, 3, 0, // Face +X-Axis
-
-        4, 5, 6, // Face +Z-Axis
-        6, 7, 4, // Face +Z-Axis
-
-        8, 9, 10, // Face +Y-Axis
-        10, 11, 8, // Face +Y-Axis
-
-        12, 13, 14, // Face -X-Axis
-        14, 15, 12, // Face -X-Axis
-
-        16, 17, 18, // Face -Z-Axis
-        18, 19, 16, // Face -Z-Axis
-
-        20, 21, 22, // Face -Y-Axis
-        22, 23, 20, // Face -Y-Axis
     ]);
 
     let vertclrs = new Uint8Array([
@@ -186,20 +156,63 @@ export function makeCube(gl, size) {
         0, 255, 0, // Face -Y-Axis
     ]);
 
+    let vert_indices = new Uint16Array([
+        0, 1, 2, // Face +X-Axis
+        2, 3, 0, // Face +X-Axis
+
+        4, 5, 6, // Face +Z-Axis
+        6, 7, 4, // Face +Z-Axis
+
+        8, 9, 10, // Face +Y-Axis
+        10, 11, 8, // Face +Y-Axis
+
+        12, 13, 14, // Face -X-Axis
+        14, 15, 12, // Face -X-Axis
+
+        16, 17, 18, // Face -Z-Axis
+        18, 19, 16, // Face -Z-Axis
+
+        20, 21, 22, // Face -Y-Axis
+        22, 23, 20, // Face -Y-Axis
+    ]);
+
+    
+
     // let tex_coords = [];
 
     let geometry = {};
+    geometry.vertexArray = gl.createVertexArray();
+    gl.bindVertexArray(geometry.vertexArray);
+
     geometry.verticesBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, geometry.verticesBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+    gl.enableVertexAttribArray(a_position);
+    gl.vertexAttribPointer(
+        a_position,
+        3, // size
+        gl.FLOAT, // type
+        false, // normalize
+        0, // stride
+        0 // offset
+    );
 
     geometry.vertClrBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, geometry.vertClrBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, vertclrs, gl.STATIC_DRAW);
+    gl.enableVertexAttribArray(a_color);
+    gl.vertexAttribPointer(
+        a_color,
+        3, // size
+        gl.UNSIGNED_BYTE, // type
+        false, // normalize
+        0, // stride
+        0 // offset
+    );
 
     geometry.vertIndices = gl.createBuffer();
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, geometry.vertIndices);
-    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, vert_indices, gl.STATIC_DRAW);   
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, vert_indices, gl.STATIC_DRAW);
     
     return geometry;
 }
