@@ -50,21 +50,22 @@ function main() {
      * Get This Shader Program's Attributes and Uniforms
      */
     const u_local2clipspace = gl.getUniformLocation(program, "u_local2clipspace");
-    
-
     console.log(`UniformLocal2ClipSpace: ${u_local2clipspace}`);
 
-    const matWorld2screen = CoreMatrix.matrix44.orthographic(0, gl.canvas.width, gl.canvas.height, 0, 400, -400 );
+    const matWorld2screen = CoreMatrix.matrix44.orthographic(0, gl.canvas.width, gl.canvas.height, 0, 1000, -10000 );
     
-    const NUM_INSTANCES = 1;
+    const NUM_INSTANCES = 3;
     let instances = [];
-    let widthrange = [(gl.canvas.width * 0.1), (gl.canvas.width * 0.9)];
-    let heightrange = [(gl.canvas.height * 0.1), (gl.canvas.height * 0.9)];
+    // let widthrange = [(gl.canvas.width * 0.1), (gl.canvas.width * 0.9)];
+    // let heightrange = [(gl.canvas.height * 0.1), (gl.canvas.height * 0.9)];
     for (let i = 0; i < NUM_INSTANCES; i++) {
         let obj = {
-            scale: (100 + CoreRand.randomInt(0, 500)),
-            angle: [CoreRand.randomInt(0, 360), CoreRand.randomInt(0, 360), CoreRand.randomInt(0, 360)],
-            location: [CoreRand.randomInt(widthrange[0], widthrange[1]), CoreRand.randomInt(heightrange[0], heightrange[1]), 0],
+            scale: 200,
+            angle: [0, 60, 180],
+            location: [500 + (i * 200), 1100, (i * 200)],
+            // scale: (100 + CoreRand.randomInt(0, 400)),
+            // angle: [CoreRand.randomInt(0, 360), CoreRand.randomInt(0, 360), CoreRand.randomInt(0, 360)],
+            // location: [CoreRand.randomInt(widthrange[0], widthrange[1]), CoreRand.randomInt(heightrange[0], heightrange[1]), 0],
         };
 
         instances.push(obj);
@@ -72,10 +73,10 @@ function main() {
 
     
     /**
-     * Make a Cube
+     * Make a Geometry
      */
-    console.log("Make a Cube");
-    const geometry = Geometry.makeCube(gl, program);
+    // const geometry = Geometry.makeCube(gl, program);
+    const geometry = Geometry.makeTree(gl, program);
     
     let isDirty = true;
 
@@ -115,7 +116,8 @@ function main() {
         gl.clearColor(0.9,0.9,0.8,1);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-        gl.enable(gl.CULL_FACE);
+        gl.enable(gl.DEPTH_TEST);
+        // gl.enable(gl.CULL_FACE);
 
         /**
          * Use this shader Program
@@ -126,7 +128,7 @@ function main() {
         // Draw Geometry
         instances.forEach((item) => {
             gl.uniformMatrix4fv(u_local2clipspace, false, item.matrix);
-            gl.drawElements(gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, 0);
+            gl.drawElements(gl.TRIANGLES, geometry.numElements, gl.UNSIGNED_SHORT, 0);
         });
         
         let id = requestAnimationFrame(drawScene);

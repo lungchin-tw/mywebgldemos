@@ -80,7 +80,7 @@ export function makeParallelogram(gl, program) {
 /**
  * 
  * @param {WebGL2RenderingContext} gl 
- * @param {int} size Cube Size
+ * @param {WebGLProgram} program
  * @description Apply Right-Hand Rule -> Right: X-Axis, Up: Y-Axis, OutScreen: Z-Axis
  */
 export function makeCube(gl, program) {
@@ -213,6 +213,120 @@ export function makeCube(gl, program) {
     geometry.vertIndices = gl.createBuffer();
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, geometry.vertIndices);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, vert_indices, gl.STATIC_DRAW);
+    
+    return geometry;
+}
+
+
+/**
+ * 
+ * @param {WebGL2RenderingContext} gl 
+ * @param {WebGLProgram} program
+ * @description Apply Right-Hand Rule -> Right: X-Axis, Up: Y-Axis, OutScreen: Z-Axis
+ */
+export function makeTree(gl, program) {
+    console.log(CoreEnv.getCurrentFuncName());
+
+    const a_position = gl.getAttribLocation(program, "a_position");
+    const a_color = gl.getAttribLocation(program, "a_color");
+
+    console.log(`AttrPos: ${a_position}`);
+    console.log(`AttrColor: ${a_color}`);
+
+    const vertices = new Float32Array([
+        -1.0,   0, 0, // #0 Leaf Face +Z-Axis
+         1.0,   0, 0, // #1 Leaf Face +Z-Axis
+           0, 2.0, 0, // #2 Leaf Face +Z-Axis
+
+        -0.3,    0, 0, // #3 Trunk Face +Z-Axis
+        -0.3, -1.0, 0, // #4 Trunk Face +Z-Axis
+         0.3, -1.0, 0, // #5 Trunk Face +Z-Axis
+         0.3,    0, 0, // #6 Trunk Face +Z-Axis
+
+         0, 0,  1.0, // #7 Leaf Face +X-Axis
+         0, 0, -1.0, // #8 Leaf Face +X-Axis
+         0, 2.0,  0, // #9 Leaf Face +X-Axis
+
+         0,    0,  0.3, // #10 Trunk Face +X-Axis
+         0, -1.0,  0.3, // #11 Trunk Face +X-Axis
+         0, -1.0, -0.3, // #12 Trunk Face +X-Axis
+         0,    0, -0.3, // #13 Trunk Face +X-Axis
+
+    ]);
+
+    let vertclrs = new Uint8Array([
+        255, 0, 0, // Leaf Face +Z-Axis
+        255, 0, 0, // Leaf Face +Z-Axis
+        255, 0, 0, // Leaf Face +Z-Axis
+
+        255, 0, 128, // Trunk Face +Z-Axis
+        255, 0, 128, // Trunk Face +Z-Axis
+        255, 0, 128, // Trunk Face +Z-Axis
+        255, 0, 128, // Trunk Face +Z-Axis
+
+        0, 255, 0, // Leaf Face +X-Axis
+        0, 255, 0, // Leaf Face +X-Axis
+        0, 255, 0, // Leaf Face +X-Axis
+
+        0, 255, 128, // Trunk Face +X-Axis
+        0, 255, 128, // Trunk Face +X-Axis
+        0, 255, 128, // Trunk Face +X-Axis
+        0, 255, 128, // Trunk Face +X-Axis
+    ]);
+
+    let vert_indices = new Uint16Array([
+        0, 1, 2, // Leaf Face +Z-Axis
+
+        3, 4, 5, // Trunk Face +Z-Axis
+        5, 6, 3, // Trunk Face +Z-Axis
+
+        7, 8, 9, // Leaf Face +X-Axis
+
+        10, 11, 12, // Trunk Face +X-Axis
+        12, 13, 10, // Trunk Face +X-Axis
+    ]);
+
+    
+
+    // let tex_coords = [];
+
+    let geometry = {};
+    geometry.vertexArray = gl.createVertexArray();
+    gl.bindVertexArray(geometry.vertexArray);
+
+    geometry.verticesBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, geometry.verticesBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+    gl.enableVertexAttribArray(a_position);
+    gl.vertexAttribPointer(
+        a_position,
+        3, // size
+        gl.FLOAT, // type
+        false, // normalize
+        0, // stride
+        0 // offset
+    );
+
+    geometry.vertClrBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, geometry.vertClrBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, vertclrs, gl.STATIC_DRAW);
+    gl.enableVertexAttribArray(a_color);
+    gl.vertexAttribPointer(
+        a_color,
+        3, // size
+        gl.UNSIGNED_BYTE, // type
+        false, // normalize
+        0, // stride
+        0 // offset
+    );
+
+    geometry.vertIndices = gl.createBuffer();
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, geometry.vertIndices);
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, vert_indices, gl.STATIC_DRAW);
+
+    // console.log(${})
+
+    geometry.numElements = vert_indices.length;
     
     return geometry;
 }
