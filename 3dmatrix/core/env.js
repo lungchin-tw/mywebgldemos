@@ -1,5 +1,31 @@
 'use strict';
 
+
+export function initWebGL2Context( canvasid ) {
+    console.log("Before Adjust Drawing Buffer:");
+    printEnvProperties(canvasid)
+
+    /**
+     * Approach: All In One
+     */
+    let gl = getWebGL2Context(canvasid);
+    if (!gl) {
+        console.log("WebGL2 was NOT found.");
+        return
+    } else {
+        console.log("WebGL2 was found.");
+    }
+
+    console.log(`OES_element_index_uint: ${gl.getExtension("OES_element_index_uint")}`);
+    
+    adjustDrawingBufferForHDDPI(gl)
+
+    console.log("After Adjust Drawing Buffer:");
+    printEnvProperties(canvasid)
+
+    return gl
+}
+
 export function printEnvProperties(canvasid) {
     console.log(getCurrentFuncName() + ":\n");
 

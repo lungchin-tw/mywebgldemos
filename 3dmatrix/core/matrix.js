@@ -148,6 +148,18 @@ export let matrix44 = {
             (left + right) / (left - right), (bottom + top) / (bottom - top), (near + far) / (near - far), 1,
        ];
     },
+   
+    perspective: function(fov, aspect, near, far) {
+        let f = Math.tan((Math.PI * 0.5) - (0.5 * fov));
+        let ranginv = 1.0 / (near - far);
+        return [
+            ( f / aspect), 0,                            0,  0,
+                        0, f,                            0,  0,
+                        0, 0,     ((near + far) * ranginv), -1,
+                        0, 0, (near * far * ranginv * 2.0),  0,
+       ];
+    },
+
 
     /**
      * 00 01 02 03

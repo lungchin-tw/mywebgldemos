@@ -2,42 +2,17 @@
 
 import * as CoreEnv from './core/env.js'
 import * as CoreMath from './core/math.js'
-import * as CoreRand from './core/rand.js'
 import * as CoreMatrix from './core/matrix.js'
 import * as Renderer from './core/renderer.js'
 import * as Shaders from './shaders.js'
 import * as Geometry from './geometry.js'
 
 
-function init( canvasid ) {
-    console.log("Before Adjust Drawing Buffer:");
-    CoreEnv.printEnvProperties(canvasid)
-
-    /**
-     * Approach: All In One
-     */
-    let gl = CoreEnv.getWebGL2Context(canvasid);
-    if (!gl) {
-        console.log("WebGL2 was NOT found.");
-        return
-    } else {
-        console.log("WebGL2 was found.");
-    }
-
-    console.log(`OES_element_index_uint: ${gl.getExtension("OES_element_index_uint")}`);
-    
-    CoreEnv.adjustDrawingBufferForHDDPI(gl)
-
-    console.log("After Adjust Drawing Buffer:");
-    CoreEnv.printEnvProperties(canvasid)
-
-    return gl
-}
 
 function main() {
     console.log(CoreEnv.getCurrentFuncName())
     
-    let gl = init("#maincanvas")
+    let gl = CoreEnv.initWebGL2Context("#maincanvas")
     console.assert( (gl != null), "WebGLContext not Found." )
     
     /**
@@ -52,20 +27,21 @@ function main() {
     const u_local2clipspace = gl.getUniformLocation(program, "u_local2clipspace");
     console.log(`UniformLocal2ClipSpace: ${u_local2clipspace}`);
 
-    const matWorld2screen = CoreMatrix.matrix44.orthographic(0, gl.canvas.width, gl.canvas.height, 0, 1000, -10000 );
+    // const matWorld2screen = CoreMatrix.matrix44.orthographic(0, gl.canvas.width, gl.canvas.height, 0, 1000, -10000 );
+    let fieldOfView = 90;
+    let apectRatio = (gl.canvas.clientWidth / gl.canvas.clientHeight);
+    let zNear = 1;
+    let zFar = 10000;
+    let matWorld2screen = CoreMatrix.matrix44.perspective(CoreMath.degree2Radian(fieldOfView), apectRatio, zNear, zFar );
     
     const NUM_INSTANCES = 3;
     let instances = [];
-    // let widthrange = [(gl.canvas.width * 0.1), (gl.canvas.width * 0.9)];
-    // let heightrange = [(gl.canvas.height * 0.1), (gl.canvas.height * 0.9)];
-    for (let i = 0; i < NUM_INSTANCES; i++) {
+    let yAngle = 45;
+    for (let i = 1; i <= NUM_INSTANCES; i++) {
         let obj = {
-            scale: 200,
-            angle: [0, 60, 180],
-            location: [500 + (i * 200), 1100, (i * 200)],
-            // scale: (100 + CoreRand.randomInt(0, 400)),
-            // angle: [CoreRand.randomInt(0, 360), CoreRand.randomInt(0, 360), CoreRand.randomInt(0, 360)],
-            // location: [CoreRand.randomInt(widthrange[0], widthrange[1]), CoreRand.randomInt(heightrange[0], heightrange[1]), 0],
+            scale: 30,
+            angle: [0, yAngle, 0],
+            location: [-100, 0, -(i * 200)],
         };
 
         instances.push(obj);
@@ -83,10 +59,17 @@ function main() {
     requestAnimationFrame(drawScene);
 
     
-    webglLessonsUI.setupSlider("#xangle", {value: 0 * 180 / Math.PI | 0, slide: (event, ui) => {updateAngel(0, ui.value);}, max: 360});
-    webglLessonsUI.setupSlider("#yangle", {value: 0 * 180 / Math.PI | 0, slide: (event, ui) => {updateAngel(1, ui.value);}, max: 360});
-    webglLessonsUI.setupSlider("#zangle", {value: 0 * 180 / Math.PI | 0, slide: (event, ui) => {updateAngel(2, ui.value);}, max: 360});
+    webglLessonsUI.setupSlider("#fov", {value: fieldOfView, slide: updateFov, min: 60, max: 120});
+    webglLessonsUI.setupSlider("#xangle", {value: 0, slide: (event, ui) => {updateAngel(0, ui.value);}, max: 360});
+    webglLessonsUI.setupSlider("#yangle", {value: yAngle, slide: (event, ui) => {updateAngel(1, ui.value);}, max: 360});
+    webglLessonsUI.setupSlider("#zangle", {value: 0, slide: (event, ui) => {updateAngel(2, ui.value);}, max: 360});
     
+    function updateFov(event, ui) {
+        fieldOfView = ui.value;
+        matWorld2screen = CoreMatrix.matrix44.perspective(CoreMath.degree2Radian(fieldOfView), apectRatio, zNear, zFar );
+        isDirty = true;
+    }
+
     function updateAngel(index, angle) {
         instances.forEach((item) => {
             item.angle[index] = angle;
