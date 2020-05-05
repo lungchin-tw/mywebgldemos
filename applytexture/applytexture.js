@@ -34,6 +34,7 @@ function init( canvasid ) {
 
 function loadImage(path, oncomplete) {
     console.log(CoreEnv.getCurrentFuncName() + " Begin...")
+    console.log(`WindowOrign: ${window.location.origin}`);
 
     let image = new Image();
     image.src = path;
@@ -155,11 +156,11 @@ function main() {
 
     let start = null;
     const FRAME_INTERVAL = 1000 / 5;
-    requestAnimationFrame(drawScene);
+    requestAnimationFrame(render);
     
-    function drawScene(now) {
+    function render(now) {
         if ((start != null) && ((now - start) < FRAME_INTERVAL)) {
-            requestAnimationFrame(drawScene);
+            requestAnimationFrame(render);
             return;
         }
 
@@ -203,7 +204,7 @@ function main() {
             gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
         }
 
-        requestAnimationFrame(drawScene);
+        requestAnimationFrame(render);
     }
     
     console.log("FINISHED...");

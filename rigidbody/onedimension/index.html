@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    
+    <head>
+        <title>RIGID BODY 1D DEMO</title>
+        <link rel="shortcut icon" type="image/x-icon" href="../../../favicon.ico">
+    </head>
+    <body>
+        <link href="onedimension.css" rel="stylesheet" type="text/css">
+        <p><a href="../index.html">BACK</a></p>
+        <button type="button" id="run">Run</button>
+
+        <style>
+            #maincanvas {
+                width: 100vw;
+                height: 90vh;
+                display: block;
+            }
+        </style>
+        <canvas id="maincanvas">
+            This Will be displayed if your browser doesn't support the canvas element. The closing tag is nessary.
+        </canvas>
+        
+        <script src="./core/env.js" type="module"></script>
+        <script src="./core/renderer.js" type="module"></script>
+        <script src="./core/rand.js" type="module"></script>
+        <script src="./core/math.js" type="module"></script>
+        <script src="./core/matrix.js" type="module"></script>
+        <script src="./3rdparty/webgl-lesson-ui.js"></script>
+        <script src="onedimension.js" type="module"></script>
+    </body>
+</html>
