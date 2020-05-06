@@ -1,6 +1,5 @@
 'use strict';
 
-import * as CoreEnv from './core/env.js'
 import * as CoreMatrix from './core/matrix.js'
 import * as ImageLoader from './core/imageloader.js'
 import * as Renderer from './core/renderer.js'
@@ -9,13 +8,13 @@ import * as Geometry2D from './geometry2d.js'
 
 
 function main() {
-    console.log(CoreEnv.getCurrentFuncName())
+    console.log(env.getCurrentFuncName())
     
-    let gl = CoreEnv.initWebGL2Context("#maincanvas")
+    let gl = env.initWebGL2Context("#maincanvas")
     console.assert( (gl != null), "WebGLContext not Found." )
 
     let btnrun = document.querySelector("#run");
-    btnrun.addEventListener('click', ()=>{console.log(CoreEnv.getCurrentFuncName());});
+    btnrun.addEventListener('click', ()=>{console.log(env.getCurrentFuncName());});
     
     /**
      * Create a Texture

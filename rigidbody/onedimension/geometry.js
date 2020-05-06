@@ -1,7 +1,5 @@
 'use strict';
 
-import * as CoreEnv from './core/env.js'
-
 // Traditional Coordinate: Left-Top is (0,0)
 
 // Local Coord, Center=(0,0)
@@ -13,7 +11,7 @@ import * as CoreEnv from './core/env.js'
  * @description Apply Right-Hand Rule -> Right: X-Axis, Up: Y-Axis, OutScreen: Z-Axis
  */
 export function makeCube(gl, program) {
-    console.log(CoreEnv.getCurrentFuncName());
+    console.log(env.getCurrentFuncName());
 
     const a_position = gl.getAttribLocation(program, "a_position");
     const a_color = gl.getAttribLocation(program, "a_color");
@@ -154,7 +152,7 @@ export function makeCube(gl, program) {
  * @description Apply Right-Hand Rule -> Right: X-Axis, Up: Y-Axis, OutScreen: Z-Axis
  */
 export function makeTree(gl, program) {
-    console.log(CoreEnv.getCurrentFuncName());
+    console.log(env.getCurrentFuncName());
 
     const a_position = gl.getAttribLocation(program, "a_position");
     const a_color = gl.getAttribLocation(program, "a_color");

@@ -1,7 +1,5 @@
 'use strict';
 
-import * as CoreEnv from './core/env.js'
-
 // Traditional Coordinate: Left-Top is (0,0)
 
 // Local Coord, Center=(0,0)
@@ -12,7 +10,7 @@ import * as CoreEnv from './core/env.js'
  * @description Apply Right-Hand Rule -> Right: X-Axis, Up: Y-Axis, OutScreen: Z-Axis
  */
 export function makeParallelogram(gl, program) {
-    console.log(CoreEnv.getCurrentFuncName());
+    console.log(env.getCurrentFuncName());
 
     const a_position = gl.getAttribLocation(program, "a_position");
     const a_texcoord = gl.getAttribLocation(program, "a_texcoord");
@@ -85,7 +83,7 @@ export function makeParallelogram(gl, program) {
  * @description Apply Right-Hand Rule -> Right: X-Axis, Up: Y-Axis, OutScreen: Z-Axis
  */
 export function makeRectangle(gl, program) {
-    console.log(CoreEnv.getCurrentFuncName());
+    console.log(env.getCurrentFuncName());
 
     const a_position = gl.getAttribLocation(program, "a_position");
     const a_texcoord = gl.getAttribLocation(program, "a_texcoord");
