@@ -9,5 +9,5 @@
         "outDir": "./built",
         "sourceMap": true,
         "alwaysStrict": true,
-    }
+    },
 }
