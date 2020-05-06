@@ -2,7 +2,7 @@
 <html>
     
     <head>
-        <title>RIGID BODY 1D DEMO</title>
+        <title>RIGID BODY 1D DEMO - TYPESCRIPT VERSION</title>
         <link rel="shortcut icon" type="image/x-icon" href="../../../favicon.ico">
     </head>
     <body>
@@ -12,7 +12,7 @@
 
         <style>
             #maincanvas {
-                width: 100vw;
+                width: 99vw;
                 height: 90vh;
                 display: block;
             }
@@ -21,14 +21,12 @@
             This Will be displayed if your browser doesn't support the canvas element. The closing tag is nessary.
         </canvas>
         
-        <script src="./core/env.js"></script>
-        <script src="./core/textureutils.js"></script>
-        <script src="./geometry2d.js"></script>
-        <script src="./core/renderer.js" type="module"></script>
-        <script src="./core/rand.js" type="module"></script>
-        <script src="./core/math.js" type="module"></script>
-        <script src="./core/matrix.js" type="module"></script>
-        <script src="./3rdparty/webgl-lesson-ui.js"></script>
-        <script src="onedimension.js" type="module"></script>
+        <script src="built/src/core/env.js"></script>
+        <script src="built/src/core/textureutils.js"></script>
+        <script src="built/src/core/renderer.js"></script>
+        <script src="built/src/core/matrix33.js"></script>
+        <script src="built/src/shaders.js"></script>
+        <script src="built/src/geometry2d.js"></script>
+        <script src="built/src/onedimension.js"></script>
     </body>
 </html>

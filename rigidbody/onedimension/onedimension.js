@@ -1,10 +1,8 @@
 'use strict';
 
 import * as CoreMatrix from './core/matrix.js'
-import * as ImageLoader from './core/imageloader.js'
 import * as Renderer from './core/renderer.js'
 import * as Shaders from './shaders.js'
-import * as Geometry2D from './geometry2d.js'
 
 
 function main() {
@@ -17,14 +15,9 @@ function main() {
     btnrun.addEventListener('click', ()=>{console.log(env.getCurrentFuncName());});
     
     /**
-     * Create a Texture
+     * Make a Default Checker Texture
      */
-    let texture = gl.createTexture();
-    gl.bindTexture(gl.TEXTURE_2D, texture);
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 2, 2, 0, gl.RGBA, gl.UNSIGNED_BYTE, ImageLoader.NON_IMAGE); // Set Default Image
-    gl.generateMipmap(gl.TEXTURE_2D);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+    let texture = textureUtils.makeDefaultCheckerTexture(gl);
     
     /**
      * Create Shaders
@@ -59,7 +52,7 @@ function main() {
      * Make a Rectangle
      */
     console.log("Make a Rectangle");
-    const geometry = Geometry2D.makeRectangle(gl, program);
+    const geometry = geometry2D.makeRectangle(gl, program);
 
     requestAnimationFrame(drawScene);
     
