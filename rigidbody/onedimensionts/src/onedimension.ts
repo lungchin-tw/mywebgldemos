@@ -24,23 +24,20 @@ function main() {
 
     const texture = textureUtils.makeDefaultCheckerTexture(gl);
 
-    // let instances = [];
+    let instances: Actor2D[] = [];
 
-    let obj = {
-        scale: 200,
-        angle: 0,
-        location: [500, 500],
-        color: [Math.random(), Math.random(), Math.random(), 1],
-        matrix:matrix33.identity(),
-    };
+    let actor:Actor2D = new Actor2D();
+    actor.scale = 200;
+    actor.angle = 0;
+    actor.location = [500, 500];
+    actor.color = [Math.random(), Math.random(), Math.random(), 1];
+    
+    instances.push(actor);
 
-    obj.matrix = matrix33.local2ClipSpace(obj.scale, obj.angle, obj.location, gl.canvas.width, gl.canvas.height);
-
-    // instances.push(obj);
-    console.log(obj);
-    console.log(typeof obj);
-    // console.log(instances);
-    // console.log(typeof instances);
+    console.log(actor);
+    console.log(typeof actor);
+    console.log(instances);
+    console.log(typeof instances);
 
     const geometry = geometry2D.makeRectangle(gl,program);
     
@@ -52,12 +49,19 @@ function main() {
             start = now;
             requestAnimationFrame(drawScene);
             return;
-        } else if ((now - start) > 20) { // 20ms
-            start = now;
-        } else {
+        }
+
+        let dt:number = now - start;
+        
+        if (dt < 20) { // 20ms
             requestAnimationFrame(drawScene);
             return;
         }
+
+        start = now;
+
+        env.adjustDrawingBufferForHDDPI(gl);
+        const mat_projection = matrix33.projection(gl.canvas.width, gl.canvas.height);
 
         /**
          * Clear the Viewport
@@ -80,9 +84,14 @@ function main() {
         gl.bindTexture(gl.TEXTURE_2D, texture);
         gl.uniform1i(u_texture, tex_unit);
 
-        gl.uniformMatrix3fv(u_local2clipspace, false, obj.matrix);
-        gl.uniform4fv(u_color, obj.color);
-        gl.drawElements(gl.TRIANGLES, geometry.numElements, gl.UNSIGNED_SHORT, 0);
+        instances.forEach((actor:Actor2D)=>{
+            actor.update(dt);
+            gl.uniformMatrix3fv(u_local2clipspace, false, matrix33.multiply(actor.worldMatrix, mat_projection));
+            gl.uniform4fv(u_color, actor.color);
+            gl.drawElements(gl.TRIANGLES, geometry.numElements, gl.UNSIGNED_SHORT, 0);
+        });
+
+        
 
         // Draw Geometry
         // instances.forEach((item) => {

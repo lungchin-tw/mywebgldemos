@@ -72,6 +72,15 @@
         ];
     }
 
+    function local2World( scale, angle, location) {
+        let s = matrix33.scaling(scale, scale);
+        let r = matrix33.rotation(angle);
+        let t = matrix33.translation(location[0], location[1]);
+        let matrix = matrix33.multiply(s, r);
+        matrix = matrix33.multiply(matrix, t);
+        return matrix;
+    }
+
     function local2ClipSpace( scale, angle, location, sw, sh ) {
         let s = matrix33.scaling(scale, scale);
         let r = matrix33.rotation(angle);
@@ -90,6 +99,7 @@
         translation: translation,
         projection: projection,
         multiply: multiply,
+        local2World:local2World,
         local2ClipSpace: local2ClipSpace,
     };
 }));
