@@ -23,6 +23,7 @@ function main() {
     actor.angle = 0;
     actor.location = [500, 500];
     actor.color = [Math.random(), Math.random(), Math.random(), 1];
+    // actor.velocity = [0, 100];
     instances.push(actor);
     console.log(actor);
     console.log(typeof actor);
