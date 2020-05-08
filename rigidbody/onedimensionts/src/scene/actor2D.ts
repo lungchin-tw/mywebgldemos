@@ -2,22 +2,27 @@
 class Actor2D {
     #scale:number;
     #angle:number;
-    #location:[number,number];
+    #location:Vector2;
     #worldMatrix:number[];
     #color:[number,number,number,number];
     #isDirty:boolean;
 
     #velocity:Vector2;
-    #speed:number;
+    #acceleration:Vector2;
+    #elapsed:number;
+
+    #collider: SolidRectCollider;
 
     constructor() {
         this.#scale = 1;
         this.#angle = 0;
-        this.#location = [0,0];
+        this.#location = new Vector2();
         this.#worldMatrix = matrix33.identity();
         this.#color = [1, 1, 1, 1];
         this.#velocity = new Vector2();
-        this.#speed = 0;
+        this.#acceleration = new Vector2();
+        this.#elapsed = 0;
+
         this.#isDirty = true;
     }
 
@@ -39,9 +44,13 @@ class Actor2D {
         return this.#angle;
     }
 
-    set location(xy:[number, number]) {
-        this.#location = xy;
+    set location(value:Vector2) {
+        this.#location = value;
         this.#isDirty = true;
+    }
+
+    get location():Vector2 {
+        return this.#location;
     }
 
     get worldMatrix():number[] {
@@ -58,17 +67,32 @@ class Actor2D {
 
     set velocity(value:Vector2) {
         this.#velocity = value;
-        // this.#speed = Math.sqrt(Math.pow(value[0], 2) + Math.pow(value[1], 2));
     }
 
     get velocity(): Vector2 {
         return this.#velocity;
     }
-    
+
+    set acceleration(value:Vector2) {
+        this.#acceleration = value;
+    }
+
+    set collider(value:SolidRectCollider) {
+        this.#collider = value;
+    }
+
     update(dt:number) {
         if (this.#isDirty == true) {
             this.#isDirty = false;
-            this.#worldMatrix = matrix33.local2World(this.#scale, this.#angle, this.#location);
+            this.#worldMatrix = matrix33.local2World(this.#scale, this.#angle, this.#location.xy);
+        }
+
+        this.#elapsed = dt / 1000;
+        if ((this.#velocity.length > 0) || (this.#acceleration.length > 0)) {
+            const result = Kinematics2D.MotionByAcceleration(this.velocity, this.#acceleration, this.#elapsed);
+            this.location = Vector2.Add(this.location, result.location);
+            this.velocity = result.velocity;
+            // console.log(this.velocity.getY());
         }
     }
 }

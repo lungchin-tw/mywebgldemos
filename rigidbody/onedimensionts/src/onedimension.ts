@@ -6,7 +6,7 @@ function main() {
     console.assert( (gl != null), "WebGLContext not Found." );
 
     let btnrun:Element = document.querySelector("#run");
-    btnrun.addEventListener('click', ()=>{console.log(env.getCurrentFuncName());});
+    btnrun.addEventListener('click', ()=>{toggleRunning();});
 
     const program = renderer.createProgramFromSource(gl, shaders.vs, shaders.fs);
     console.assert( (program != null), "Create Shader Failed." )
@@ -26,12 +26,15 @@ function main() {
 
     let instances: Actor2D[] = [];
 
+    const location = new Vector2([500, 0]);
+    const velocity = new Vector2([0, 100]);
+    const acc = new Vector2([0, 9810]);
+
     let actor:Actor2D = new Actor2D();
     actor.scale = 200;
     actor.angle = 0;
-    actor.location = [500, 500];
+    actor.location = location;
     actor.color = [Math.random(), Math.random(), Math.random(), 1];
-    // actor.velocity = [0, 100];
     
     instances.push(actor);
 
@@ -44,6 +47,15 @@ function main() {
     
     requestAnimationFrame(drawScene);
 
+    function toggleRunning() {
+        instances.forEach((actor:Actor2D)=>{
+            actor.location = location;
+            actor.velocity = velocity;
+            actor.acceleration = acc;
+        });
+
+    }
+
     let start: number = null;
     function drawScene(now:number) {
         if (!start) {
@@ -54,14 +66,11 @@ function main() {
 
         let dt:number = now - start;
         
-        if (dt < 20) { // 20ms
-            requestAnimationFrame(drawScene);
-            return;
-        }
-
         start = now;
 
         env.adjustDrawingBufferForHDDPI(gl);
+        const bottom = gl.canvas.height;
+
         const mat_projection = matrix33.projection(gl.canvas.width, gl.canvas.height);
 
         /**
@@ -86,21 +95,19 @@ function main() {
         gl.uniform1i(u_texture, tex_unit);
 
         instances.forEach((actor:Actor2D)=>{
+            if (actor.location.getY() > bottom) {
+                actor.location.setY(0);
+                actor.velocity = Vector2.ZeroVector;
+                actor.acceleration = Vector2.ZeroVector;
+            }
+
             actor.update(dt);
+
             gl.uniformMatrix3fv(u_local2clipspace, false, matrix33.multiply(actor.worldMatrix, mat_projection));
             gl.uniform4fv(u_color, actor.color);
             gl.drawElements(gl.TRIANGLES, geometry.numElements, gl.UNSIGNED_SHORT, 0);
         });
-
         
-
-        // Draw Geometry
-        // instances.forEach((item) => {
-        //     gl.uniformMatrix3fv(u_local2clipspace, false, item.matrix);
-        //     gl.uniform4fv(u_color, item.color);
-        //     gl.drawElements(gl.TRIANGLES, geometry.numElements, gl.UNSIGNED_SHORT, 0);
-        // });
-
         requestAnimationFrame(drawScene);
     }
 }

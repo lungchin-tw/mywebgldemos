@@ -4,7 +4,7 @@ function main() {
     let gl = env.initWebGL2Context("#maincanvas");
     console.assert((gl != null), "WebGLContext not Found.");
     let btnrun = document.querySelector("#run");
-    btnrun.addEventListener('click', () => { console.log(env.getCurrentFuncName()); });
+    btnrun.addEventListener('click', () => { toggleRunning(); });
     const program = renderer.createProgramFromSource(gl, shaders.vs, shaders.fs);
     console.assert((program != null), "Create Shader Failed.");
     /**
@@ -18,12 +18,14 @@ function main() {
     console.log(`UniformTexture: ${u_texture}`);
     const texture = textureUtils.makeDefaultCheckerTexture(gl);
     let instances = [];
+    const location = new Vector2([500, 0]);
+    const velocity = new Vector2([0, 100]);
+    const acc = new Vector2([0, 9810]);
     let actor = new Actor2D();
     actor.scale = 200;
     actor.angle = 0;
-    actor.location = [500, 500];
+    actor.location = location;
     actor.color = [Math.random(), Math.random(), Math.random(), 1];
-    // actor.velocity = [0, 100];
     instances.push(actor);
     console.log(actor);
     console.log(typeof actor);
@@ -31,6 +33,13 @@ function main() {
     console.log(typeof instances);
     const geometry = geometry2D.makeRectangle(gl, program);
     requestAnimationFrame(drawScene);
+    function toggleRunning() {
+        instances.forEach((actor) => {
+            actor.location = location;
+            actor.velocity = velocity;
+            actor.acceleration = acc;
+        });
+    }
     let start = null;
     function drawScene(now) {
         if (!start) {
@@ -39,12 +48,9 @@ function main() {
             return;
         }
         let dt = now - start;
-        if (dt < 20) { // 20ms
-            requestAnimationFrame(drawScene);
-            return;
-        }
         start = now;
         env.adjustDrawingBufferForHDDPI(gl);
+        const bottom = gl.canvas.height;
         const mat_projection = matrix33.projection(gl.canvas.width, gl.canvas.height);
         /**
          * Clear the Viewport
@@ -65,17 +71,16 @@ function main() {
         gl.bindTexture(gl.TEXTURE_2D, texture);
         gl.uniform1i(u_texture, tex_unit);
         instances.forEach((actor) => {
+            if (actor.location.getY() > bottom) {
+                actor.location.setY(0);
+                actor.velocity = Vector2.ZeroVector;
+                actor.acceleration = Vector2.ZeroVector;
+            }
             actor.update(dt);
             gl.uniformMatrix3fv(u_local2clipspace, false, matrix33.multiply(actor.worldMatrix, mat_projection));
             gl.uniform4fv(u_color, actor.color);
             gl.drawElements(gl.TRIANGLES, geometry.numElements, gl.UNSIGNED_SHORT, 0);
         });
-        // Draw Geometry
-        // instances.forEach((item) => {
-        //     gl.uniformMatrix3fv(u_local2clipspace, false, item.matrix);
-        //     gl.uniform4fv(u_color, item.color);
-        //     gl.drawElements(gl.TRIANGLES, geometry.numElements, gl.UNSIGNED_SHORT, 0);
-        // });
         requestAnimationFrame(drawScene);
     }
 }

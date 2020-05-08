@@ -1,0 +1,1 @@
+{"version":3,"file":"RectCollider.js","sourceRoot":"","sources":["../../../../src/scene/collider2d/RectCollider.ts"],"names":[],"mappings":";;;;;;;;;AACA,MAAM,iBAAiB;IAInB,YAAY,KAAc;QAH1B,yBAAgB;QAChB,2BAA8C;QAG1C,uBAAA,IAAI,UAAU,CAAC,KAAK,IAAI,SAAS,CAAC,CAAC,CAAC,CAAC,KAAK,CAAC,CAAC,CAAC,IAAI,OAAO,EAAE,EAAC;IAC/D,CAAC;IAED,MAAM,CAAC,KAAwB;QAC3B,OAAO,KAAK,CAAC;IACjB,CAAC;CACJ"}
