@@ -1,4 +1,5 @@
 "use strict";
+// import {SolidRectCollider} from "./collider2d/RectCollider"
 var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, privateMap, value) {
     if (!privateMap.has(receiver)) {
         throw new TypeError("attempted to set private field on non-instance");

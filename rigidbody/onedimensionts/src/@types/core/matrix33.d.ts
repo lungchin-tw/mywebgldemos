@@ -2,6 +2,11 @@
  * 
  */
 
+ declare module 'matrix33' {
+     var foo: any;
+     export = foo;
+ }
+
 export as namespace matrix33;
 
 export function identity():number[];

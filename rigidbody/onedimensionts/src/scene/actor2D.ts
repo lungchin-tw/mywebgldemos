@@ -1,4 +1,6 @@
 
+// import {SolidRectCollider} from "./collider2d/RectCollider"
+
 class Actor2D {
     #scale:number;
     #angle:number;
@@ -11,7 +13,7 @@ class Actor2D {
     #acceleration:Vector2;
     #elapsed:number;
 
-    #collider: SolidRectCollider;
+    #collider:SolidRectCollider;
 
     constructor() {
         this.#scale = 1;
