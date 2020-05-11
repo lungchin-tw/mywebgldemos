@@ -13,8 +13,6 @@ class Actor2D {
     #acceleration:Vector2;
     #elapsed:number;
 
-    #collider:SolidRectCollider;
-
     constructor() {
         this.#scale = 1;
         this.#angle = 0;
@@ -77,10 +75,6 @@ class Actor2D {
 
     set acceleration(value:Vector2) {
         this.#acceleration = value;
-    }
-
-    set collider(value:SolidRectCollider) {
-        this.#collider = value;
     }
 
     update(dt:number) {

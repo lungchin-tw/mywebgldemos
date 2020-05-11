@@ -14,7 +14,7 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
 };
 var _localBound, _localCorners, _scale, _angle, _location, _worldMatrix, _isDirty;
 class SolidRectCollider {
-    constructor() {
+    constructor(localbound) {
         _localBound.set(this, void 0);
         _localCorners.set(this, void 0); // [left-top, left-bottom, right-bottom, right-top]
         _scale.set(this, 1);
@@ -22,10 +22,8 @@ class SolidRectCollider {
         _location.set(this, new Vector2());
         _worldMatrix.set(this, matrix33.identity());
         _isDirty.set(this, true);
+        __classPrivateFieldSet(this, _localBound, (localbound != undefined) ? localbound : new Vector4());
     }
-    // constructor(localbound?:Vector4) {
-    //     this.localBound = (localbound != undefined) ? localbound : new Vector4();
-    // }
     // set localBound(value:Vector4) {
     //     this.#localBound = value;
     //     this.UpdateLocalCorners();

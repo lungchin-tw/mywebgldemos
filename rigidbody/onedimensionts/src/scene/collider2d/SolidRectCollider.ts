@@ -11,9 +11,9 @@ class SolidRectCollider {
 
     #isDirty: boolean = true;
 
-    // constructor(localbound?:Vector4) {
-    //     this.localBound = (localbound != undefined) ? localbound : new Vector4();
-    // }
+    constructor(localbound?:Vector4) {
+        this.#localBound = (localbound != undefined) ? localbound : new Vector4();
+    }
 
     // set localBound(value:Vector4) {
     //     this.#localBound = value;

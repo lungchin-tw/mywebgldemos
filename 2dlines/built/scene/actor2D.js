@@ -13,7 +13,7 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     }
     return privateMap.get(receiver);
 };
-var _scale, _angle, _location, _worldMatrix, _color, _isDirty, _velocity, _acceleration, _elapsed, _collider;
+var _scale, _angle, _location, _worldMatrix, _color, _isDirty, _velocity, _acceleration, _elapsed;
 class Actor2D {
     constructor() {
         _scale.set(this, void 0);
@@ -25,7 +25,6 @@ class Actor2D {
         _velocity.set(this, void 0);
         _acceleration.set(this, void 0);
         _elapsed.set(this, void 0);
-        _collider.set(this, void 0);
         __classPrivateFieldSet(this, _scale, 1);
         __classPrivateFieldSet(this, _angle, 0);
         __classPrivateFieldSet(this, _location, new Vector2());
@@ -75,9 +74,6 @@ class Actor2D {
     set acceleration(value) {
         __classPrivateFieldSet(this, _acceleration, value);
     }
-    set collider(value) {
-        __classPrivateFieldSet(this, _collider, value);
-    }
     update(dt) {
         if (__classPrivateFieldGet(this, _isDirty) == true) {
             __classPrivateFieldSet(this, _isDirty, false);
@@ -91,5 +87,5 @@ class Actor2D {
         }
     }
 }
-_scale = new WeakMap(), _angle = new WeakMap(), _location = new WeakMap(), _worldMatrix = new WeakMap(), _color = new WeakMap(), _isDirty = new WeakMap(), _velocity = new WeakMap(), _acceleration = new WeakMap(), _elapsed = new WeakMap(), _collider = new WeakMap();
+_scale = new WeakMap(), _angle = new WeakMap(), _location = new WeakMap(), _worldMatrix = new WeakMap(), _color = new WeakMap(), _isDirty = new WeakMap(), _velocity = new WeakMap(), _acceleration = new WeakMap(), _elapsed = new WeakMap();
 //# sourceMappingURL=actor2D.js.map

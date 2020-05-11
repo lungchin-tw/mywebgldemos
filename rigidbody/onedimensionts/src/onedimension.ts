@@ -44,6 +44,9 @@ function main() {
     console.log(typeof instances);
 
     const geometry = geometry2D.makeRectangle(gl,program);
+
+    actor.collider = new SolidRectCollider(new Vector4([-0.5, -0.5, 0.5, 0.5]));
+
     
     requestAnimationFrame(drawScene);
 
